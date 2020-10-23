@@ -15,12 +15,12 @@ interface RepositoryInterface
     /**
      * @param string|int $id
      *
-     * @return object
+     * @return IdentityInterface|object
      */
     public function find($id);
 
     /**
-     * @return object[]
+     * @return IdentityInterface[]|object[]
      */
     public function findAll();
 }
