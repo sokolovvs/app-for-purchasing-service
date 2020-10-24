@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Components\Exceptions\DomainExceptions\Resource\Validation;
+namespace App\Components\Exceptions\ApplicationExceptions\Resource\Validation;
 
 
-use App\Components\Exceptions\DomainExceptions\ImproveDomainException;
+use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
 use Throwable;
 
-class ValidationException extends ImproveDomainException
+class ValidationException extends ImproveApplicationException
 {
     public function __construct(
         $message = 'Validation exception',

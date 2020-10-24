@@ -4,7 +4,7 @@
 namespace App\Components\Validation;
 
 
-use App\Components\Exceptions\DomainExceptions\Resource\Validation\ValidationException;
+use App\Components\Exceptions\ApplicationExceptions\Resource\Validation\ValidationException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

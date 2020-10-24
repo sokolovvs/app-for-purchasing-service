@@ -1,16 +1,16 @@
 <?php
 
 
-namespace App\Components\Exceptions\DomainExceptions\Resource;
+namespace App\Components\Exceptions\ApplicationExceptions\Security;
 
 
-use App\Components\Exceptions\DomainExceptions\ImproveDomainException;
+use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
 use Throwable;
 
-class EntityNotFoundException extends ImproveDomainException
+class SecurityException extends ImproveApplicationException
 {
     public function __construct(
-        $message = 'Resource not found',
+        $message = 'Security Exception',
         Throwable $previous = null,
         array $invalidParams = [],
         array $additionalParams = []

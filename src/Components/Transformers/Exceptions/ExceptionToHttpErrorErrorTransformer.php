@@ -5,10 +5,10 @@ namespace App\Components\Transformers\Exceptions;
 
 
 use App\Components\Errors\HttpError;
-use App\Components\Exceptions\DomainExceptions\ImproveDomainException;
-use App\Components\Exceptions\DomainExceptions\Resource\EntityNotFoundException;
-use App\Components\Exceptions\DomainExceptions\Resource\Validation\ValidationException;
-use App\Components\Exceptions\DomainExceptions\Security\UnauthorizedException;
+use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
+use App\Components\Exceptions\ApplicationExceptions\Resource\Validation\ValidationException;
+use App\Components\Exceptions\ApplicationExceptions\Security\UnauthorizedException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -36,7 +36,7 @@ class ExceptionToHttpErrorErrorTransformer implements ExceptionToHttpErrorTransf
             $message = 'Unknown endpoint';
         }
 
-        if ($exception instanceof ImproveDomainException) {
+        if ($exception instanceof ImproveApplicationException) {
             $invalidParams = $exception->getInvalidParams();
             $additionalParams = $exception->getAdditionalParams();
             $message = $exception->getMessage();
@@ -45,7 +45,7 @@ class ExceptionToHttpErrorErrorTransformer implements ExceptionToHttpErrorTransf
                 $code = Response::HTTP_UNAUTHORIZED;
             }
 
-            if ($exception instanceof EntityNotFoundException) {
+            if ($exception instanceof ResourceNotFoundException) {
                 $code = Response::HTTP_NOT_FOUND;
             }
 

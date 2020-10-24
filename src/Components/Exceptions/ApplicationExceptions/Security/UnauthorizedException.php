@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Components\Exceptions\DomainExceptions\Security;
+namespace App\Components\Exceptions\ApplicationExceptions\Security;
 
 
 use Throwable;

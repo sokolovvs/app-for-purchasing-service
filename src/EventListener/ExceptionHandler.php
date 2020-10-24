@@ -5,7 +5,7 @@ namespace App\EventListener;
 
 
 use App\Components\Errors\HttpError;
-use App\Components\Exceptions\DomainExceptions\ImproveDomainException;
+use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
 use App\Components\Serializers\Normalizers\HttpError\HttpErrorNormalizerInterface;
 use App\Components\Transformers\Exceptions\ExceptionToHttpErrorTransformerInterface;
 use Psr\Log\LoggerInterface;
@@ -37,7 +37,7 @@ class ExceptionHandler implements EventSubscriberInterface
         $httpError = $this->exceptionToHttpErrorTransformer->transform($exception);
         $this->logger->warning('Exception was handled in global exception handler', ['exception' => $exception]);
 
-        if (!$exception instanceof ImproveDomainException || !$exception instanceof NotFoundHttpException) {
+        if (!$exception instanceof ImproveApplicationException || !$exception instanceof NotFoundHttpException) {
             $this->logger->critical('Unknown error', ['exception' => $exception]);
         }
 

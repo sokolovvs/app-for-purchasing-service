@@ -4,7 +4,7 @@
 namespace App\Components\Interactors\CRUD\Base;
 
 
-use App\Components\Exceptions\DomainExceptions\Resource\EntityNotFoundException;
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Helpers\Entity\Updater\EntityUpdaterInterface;
 use App\Components\Interactors\InteractorInterface;
 use App\Components\Validation\ApplicationValidatorInterface;
@@ -34,7 +34,7 @@ abstract class AbstractUpdateInteractor implements InteractorInterface
      * @param mixed $dto
      *
      * @return IdentityInterface
-     * @throws EntityNotFoundException
+     * @throws ResourceNotFoundException
      */
     public function call($dto)
     {

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Components\Exceptions\DomainExceptions;
+namespace App\Components\Exceptions\ApplicationExceptions;
 
 
 use Throwable;
 
-class ImproveDomainException extends \DomainException
+class ImproveApplicationException extends \DomainException
 {
     private array $invalidParams;
     private array $additionalParams;
