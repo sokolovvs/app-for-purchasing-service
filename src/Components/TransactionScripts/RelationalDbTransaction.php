@@ -22,6 +22,7 @@ class RelationalDbTransaction implements ApplicationTransactionInterface
 
     public function commit(): void
     {
+        $this->entityManager->flush();
         $this->entityManager->commit();
     }
 
