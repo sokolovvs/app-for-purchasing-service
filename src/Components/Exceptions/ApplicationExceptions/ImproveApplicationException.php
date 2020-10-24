@@ -4,15 +4,16 @@
 namespace App\Components\Exceptions\ApplicationExceptions;
 
 
+use Exception;
 use Throwable;
 
-class ImproveApplicationException extends \DomainException
+class ImproveApplicationException extends Exception
 {
     private array $invalidParams;
     private array $additionalParams;
 
     public function __construct(
-        $message = 'Domain Exception',
+        $message = 'Application Exception',
         Throwable $previous = null,
         array $invalidParams = [],
         array $additionalParams = []
