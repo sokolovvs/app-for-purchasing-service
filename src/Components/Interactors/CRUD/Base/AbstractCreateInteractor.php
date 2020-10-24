@@ -25,7 +25,7 @@ abstract class AbstractCreateInteractor implements InteractorInterface
         $this->validator = $validator;
     }
 
-    public function execute($dto)
+    public function call($dto)
     {
         $this->validator->validate($dto);
         $entity = $this->creator->create($dto);
