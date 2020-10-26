@@ -17,7 +17,7 @@ interface RepositoryInterface
      *
      * @return IdentityInterface|object
      */
-    public function find($id);
+    public function findById($id);
 
     /**
      * @return IdentityInterface[]|object[]

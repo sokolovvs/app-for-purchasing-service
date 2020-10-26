@@ -26,7 +26,7 @@ abstract class AbstractGetInteractor implements InteractorInterface
      */
     public function call($id)
     {
-        $entity = $this->repository->find($id);
+        $entity = $this->repository->findById($id);
 
         if ($entity === null) {
             throw new ResourceNotFoundException();
