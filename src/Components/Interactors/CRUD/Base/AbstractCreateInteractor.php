@@ -5,11 +5,10 @@ namespace App\Components\Interactors\CRUD\Base;
 
 
 use App\Components\Helpers\Entity\Creator\EntityCreatorInterface;
-use App\Components\Interactors\InteractorInterface;
 use App\Components\Validation\ApplicationValidatorInterface;
 use App\Repository\RepositoryInterface;
 
-abstract class AbstractCreateInteractor implements InteractorInterface
+abstract class AbstractCreateInteractor
 {
     private EntityCreatorInterface $creator;
     private RepositoryInterface $repository;

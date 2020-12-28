@@ -5,11 +5,10 @@ namespace App\Components\Interactors\CRUD\Base;
 
 
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
-use App\Components\Interactors\InteractorInterface;
 use App\Entity\IdentityInterface;
 use App\Repository\RepositoryInterface;
 
-abstract class AbstractGetInteractor implements InteractorInterface
+abstract class AbstractGetInteractor
 {
     protected RepositoryInterface $repository;
 

@@ -5,10 +5,9 @@ namespace App\Components\Interactors\CRUD\Base;
 
 
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
-use App\Components\Interactors\InteractorInterface;
 use App\Repository\RepositoryInterface;
 
-abstract class AbstractDeleteInteractor implements InteractorInterface
+abstract class AbstractDeleteInteractor
 {
     private AbstractGetInteractor $getInteractor;
     private RepositoryInterface $repository;
