@@ -20,7 +20,7 @@ interface RepositoryInterface
     public function findById($id);
 
     /**
-     * @return IdentityInterface[]|object[]
+     * @return object[]
      */
     public function findAll();
 }
