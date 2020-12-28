@@ -9,10 +9,9 @@ use App\Components\Exceptions\ApplicationExceptions\Resource\Validation\Validati
 interface ApplicationValidatorInterface
 {
     /**
-     * @param       $obj
-     * @param array $validationGroups
+     * @param mixed $obj
      *
      * @throws ValidationException - throws exception if validation fail
      */
-    public function validate($obj, array $validationGroups = ['Default']): void;
+    public function validate($obj): void;
 }

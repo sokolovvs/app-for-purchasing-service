@@ -17,15 +17,9 @@ class AspectOrientedValidator implements ApplicationValidatorInterface
         $this->validator = $validator;
     }
 
-    /**
-     * @param          $object
-     * @param string[] $group
-     *
-     * @throws ValidationException
-     */
-    public function validate($object, array $group = ['Default']): void
+    public function validate($object): void
     {
-        $errors = $this->validator->validate($object, null, $group);
+        $errors = $this->validator->validate($object);
 
         if ($errors->count() > 0) {
             $errors = $this->getErrors($errors);
