@@ -9,6 +9,7 @@ use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Exceptions\ApplicationExceptions\Resource\Validation\ValidationException;
 use App\Components\Exceptions\ApplicationExceptions\Security\UnauthorizedException;
+use App\Components\Helpers\Env\EnvHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,11 +55,18 @@ class ExceptionToHttpErrorErrorTransformer implements ExceptionToHttpErrorTransf
             }
         }
 
+        if (EnvHelper::getValue('APP_ENV') === 'dev') {
+            $debug = [
+                'message' => $exception->getMessage(),
+                'stack' => $exception->getTraceAsString(),
+            ];
+        }
+
         $message = $message ?? 'Unknown error';
 
         return new HttpError(
             'https://tools.ietf.org/html/rfc2616#section-10', 'Error',
-            $code, $message, $instance, $invalidParams, $additionalParams
+            $code, $message, $instance, $invalidParams, $additionalParams, $debug ?? []
         );
     }
 }
