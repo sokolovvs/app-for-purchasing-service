@@ -11,4 +11,12 @@ interface ApplicationTransactionInterface
     public function commit(): void;
 
     public function rollback(): void;
+
+    /**
+     * @param callable $callable
+     * @param array    $args
+     *
+     * @throws \Throwable
+     */
+    public function transactional(callable $callable, array $args = []): void;
 }
