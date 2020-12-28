@@ -4,6 +4,7 @@
 namespace App\Entity\User;
 
 
+use App\Repository\User\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
