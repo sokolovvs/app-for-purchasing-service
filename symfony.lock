@@ -87,6 +87,9 @@
     "egulias/email-validator": {
         "version": "2.1.24"
     },
+    "firebase/php-jwt": {
+        "version": "v5.2.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.0"
     },
@@ -98,27 +101,6 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
-    },
-    "lcobucci/clock": {
-        "version": "2.0.0"
-    },
-    "lcobucci/jwt": {
-        "version": "4.0.0"
-    },
-    "lexik/jwt-authentication-bundle": {
-        "version": "2.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.5",
-            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
-        },
-        "files": [
-            "config/packages/lexik_jwt_authentication.yaml"
-        ]
-    },
-    "namshi/jose": {
-        "version": "7.2.3"
     },
     "nikic/php-parser": {
         "version": "v4.10.2"
@@ -302,12 +284,6 @@
     "symfony/polyfill-php80": {
         "version": "v1.19.0"
     },
-    "symfony/property-access": {
-        "version": "v5.2.1"
-    },
-    "symfony/property-info": {
-        "version": "v5.2.1"
-    },
     "symfony/redis-messenger": {
         "version": "v5.1.7"
     },
@@ -325,28 +301,7 @@
             "config/routes.yaml"
         ]
     },
-    "symfony/security-bundle": {
-        "version": "5.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.1",
-            "ref": "0a4bae19389d3b9cba1ca0102e3b2bccea724603"
-        },
-        "files": [
-            "config/packages/security.yaml"
-        ]
-    },
     "symfony/security-core": {
-        "version": "v5.2.1"
-    },
-    "symfony/security-csrf": {
-        "version": "v5.2.1"
-    },
-    "symfony/security-guard": {
-        "version": "v5.2.1"
-    },
-    "symfony/security-http": {
         "version": "v5.2.1"
     },
     "symfony/serializer": {
@@ -378,6 +333,23 @@
     "symfony/translation-contracts": {
         "version": "v2.3.0"
     },
+    "symfony/twig-bridge": {
+        "version": "v5.2.1"
+    },
+    "symfony/twig-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.0",
+            "ref": "fab9149bbaa4d5eca054ed93f9e1b66cc500895d"
+        },
+        "files": [
+            "config/packages/test/twig.yaml",
+            "config/packages/twig.yaml",
+            "templates/base.html.twig"
+        ]
+    },
     "symfony/validator": {
         "version": "4.3",
         "recipe": {
@@ -399,6 +371,9 @@
     },
     "symfony/yaml": {
         "version": "v5.1.7"
+    },
+    "twig/twig": {
+        "version": "v3.1.1"
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
