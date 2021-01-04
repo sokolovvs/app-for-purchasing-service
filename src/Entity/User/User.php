@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields={"email"}, message="It looks like your already have an account!")
  */
-class User implements IdentityInterface, UserInterface
+class User implements IdentityInterface
 {
     /**
      * @ORM\Id
@@ -58,11 +58,11 @@ class User implements IdentityInterface, UserInterface
      */
     private $isActive;
 
-    public function __construct(UuidInterface $uuid, string $email, string $password_hash, string $timezone)
+    public function __construct(UuidInterface $uuid, string $email, string $passwordHash, string $timezone)
     {
         $this->id = $uuid;
         $this->email = $email;
-        $this->password_hash = $password_hash;
+        $this->password_hash = $passwordHash;
         $this->timezone = $timezone;
         $this->created_at = new \DateTimeImmutable();
         $this->isActive = false;
@@ -119,35 +119,10 @@ class User implements IdentityInterface, UserInterface
         return $this->isActive;
     }
 
-    public function changeActiveStatus(bool $isActive): self
+    public function setActiveStatus(bool $isActive): self
     {
         $this->isActive = $isActive;
 
         return $this;
-    }
-
-    public function getRoles()
-    {
-        return ['ROLE_USER'];
-    }
-
-    public function getPassword()
-    {
-        return $this->getPasswordHash();
-    }
-
-    public function getSalt()
-    {
-        return null;
-    }
-
-    public function getUsername()
-    {
-        return $this->getEmail();
-    }
-
-    public function eraseCredentials()
-    {
-
     }
 }
