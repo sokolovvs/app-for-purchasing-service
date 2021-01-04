@@ -7,7 +7,6 @@ namespace App\Components\Helpers\Entity\Creator\EmailConfirm;
 use App\Components\Dto\EmailConfirm\AddEmailToConfirmDto;
 use App\Components\Helpers\Entity\Creator\EntityCreatorInterface;
 use App\Entity\EmailConfirm;
-use Ramsey\Uuid\Rfc4122\UuidV4;
 
 class EmailConfirmCreator implements EntityCreatorInterface
 {
@@ -19,6 +18,6 @@ class EmailConfirmCreator implements EntityCreatorInterface
      */
     public function create($dto)
     {
-        return new EmailConfirm(UuidV4::uuid4(), $dto->getUser(), $dto->getHash());
+        return new EmailConfirm($dto->getUuid(), $dto->getUser(), $dto->getHash());
     }
 }
