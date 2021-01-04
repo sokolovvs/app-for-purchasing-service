@@ -3,8 +3,11 @@
 namespace App\Entity\User;
 
 
+use App\Entity\Card;
 use App\Entity\IdentityInterface;
 use App\Repository\User\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -58,6 +61,11 @@ class User implements IdentityInterface
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Card::class, mappedBy="_user", orphanRemoval=true)
+     */
+    private $cards;
+
     public function __construct(UuidInterface $uuid, string $email, string $passwordHash, string $timezone)
     {
         $this->id = $uuid;
@@ -66,6 +74,7 @@ class User implements IdentityInterface
         $this->timezone = $timezone;
         $this->created_at = new \DateTimeImmutable();
         $this->isActive = false;
+        $this->cards = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -122,6 +131,36 @@ class User implements IdentityInterface
     public function setActiveStatus(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Card[]
+     */
+    public function getCards(): Collection
+    {
+        return $this->cards;
+    }
+
+    public function addCard(Card $card): self
+    {
+        if (!$this->cards->contains($card)) {
+            $this->cards[] = $card;
+            $card->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(Card $card): self
+    {
+        if ($this->cards->removeElement($card)) {
+            // set the owning side to null (unless already changed)
+            if ($card->getUser() === $this) {
+                $card->setUser(null);
+            }
+        }
 
         return $this;
     }
