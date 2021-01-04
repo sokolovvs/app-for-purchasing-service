@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Entity\Card;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -12,39 +14,29 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Card[]    findAll()
  * @method Card[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CardRepository extends ServiceEntityRepository
+class CardRepository extends AbstractDoctrineRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Card::class);
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $entityManager
+    ) {
+        parent::__construct($registry, $entityManager, Card::class);
     }
 
-    // /**
-    //  * @return Card[] Returns an array of Card objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $id
+     *
+     * @return Card
+     * @throws ResourceNotFoundException
+     */
+    public function getById($id): Card
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $card = $this->find($id);
 
-    /*
-    public function findOneBySomeField($value): ?Card
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($card === null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $card;
     }
-    */
 }

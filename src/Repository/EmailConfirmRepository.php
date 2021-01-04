@@ -15,12 +15,13 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method EmailConfirm[]    findAll()
  * @method EmailConfirm[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmailConfirmRepository extends ServiceEntityRepository
+class EmailConfirmRepository extends AbstractDoctrineRepository
 {
-
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, EmailConfirm::class);
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $entityManager
+    ) {
+        parent::__construct($registry, $entityManager, EmailConfirm::class);
     }
 
     /**
