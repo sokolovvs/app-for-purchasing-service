@@ -59,21 +59,20 @@ class Card
      */
     private $expiredAt;
 
-    public function getId(): ?UuidInterface
+    public function __construct(UuidInterface $id, User $user)
+    {
+        $this->id = $id;
+        $this->_user = $user;
+    }
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->_user;
-    }
-
-    public function setUser(?User $_user): self
-    {
-        $this->_user = $_user;
-
-        return $this;
     }
 
     public function getCardToken(): ?string
