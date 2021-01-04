@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 
-use App\Components\Dto\EmailConfirm\ConfrimEmailDto;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Entity\EmailConfirm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,26 +17,26 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EmailConfirmRepository extends ServiceEntityRepository
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $entityManager;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, EmailConfirm::class);
     }
 
-    public function findConfirmEmail(ConfrimEmailDto $dto): EmailConfirm
+    /**
+     * @param $id
+     *
+     * @return EmailConfirm
+     * @throws ResourceNotFoundException
+     */
+    public function getById($id): EmailConfirm
     {
-        $confirm = $this->findOneBy(
-            ['id' => $dto->getEmailId(), '_user' => $dto->getUserId(), 'hash' => $dto->getHash()]
-        );
+        $confirmation = $this->find($id);
 
-        if ($confirm !== null) {
-            return $confirm;
+        if ($confirmation === null) {
+            throw new ResourceNotFoundException();
         }
 
-        throw new ResourceNotFoundException();
+        return $confirmation;
     }
 }
