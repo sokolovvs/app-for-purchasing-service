@@ -9,7 +9,7 @@ use App\Components\Helpers\Entity\Creator\User\UserCreator;
 use App\Components\Interactors\CRUD\Base\AbstractCreateInteractor;
 use App\Components\Validation\ApplicationValidatorInterface;
 use App\Entity\User\User;
-use App\Repository\RepositoryInterface;
+use App\Repository\User\UserRepositoryInterface;
 
 /**
  * Class CreateUserInteractor
@@ -21,7 +21,7 @@ final class CreateUserInteractor extends AbstractCreateInteractor
 {
     public function __construct(
         UserCreator $creator,
-        RepositoryInterface $repository,
+        UserRepositoryInterface $repository,
         ApplicationValidatorInterface $validator
     ) {
         parent::__construct($creator, $repository, $validator);
