@@ -21,7 +21,7 @@ class LoginController extends AbstractController
     }
 
     #[Route('/api/v1/sign-in', name: 'sign-in', methods: ['POST'])]
-    public function confirmEmail(
+    public function signIn(
         Request $request
     ): JsonResponse {
         try {
