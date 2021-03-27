@@ -17,7 +17,7 @@ class TokenIssuer implements TokenIssuerInterface
         $payload['iss'] = EnvHelper::getValue('DOMAIN_URL');
         $payload['iat'] = time();
 
-        return sprintf("Bearer %s", JWT::encode($payload, $decryptedKey, 'RS256'));
+        return sprintf("Bearer %s", JWT::encode($payload, $decryptedKey, 'HS256'));
     }
 
     public function fromUser(User $user): string
