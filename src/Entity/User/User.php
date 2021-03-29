@@ -5,6 +5,7 @@ namespace App\Entity\User;
 
 use App\Entity\Card;
 use App\Entity\IdentityInterface;
+use App\Entity\RefreshToken;
 use App\Repository\User\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -66,6 +67,11 @@ class User implements IdentityInterface
      */
     private $cards;
 
+    /**
+     * @ORM\OneToMany(targetEntity=RefreshToken::class, mappedBy="_user", orphanRemoval=true)
+     */
+    private $refreshTokens;
+
     public function __construct(UuidInterface $uuid, string $email, string $passwordHash, string $timezone)
     {
         $this->id = $uuid;
@@ -75,6 +81,7 @@ class User implements IdentityInterface
         $this->created_at = new \DateTimeImmutable();
         $this->isActive = false;
         $this->cards = new ArrayCollection();
+        $this->refreshTokens = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -159,6 +166,36 @@ class User implements IdentityInterface
             // set the owning side to null (unless already changed)
             if ($card->getUser() === $this) {
                 $card->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RefreshToken[]
+     */
+    public function getRefreshTokens(): Collection
+    {
+        return $this->refreshTokens;
+    }
+
+    public function addRefreshToken(RefreshToken $refreshToken): self
+    {
+        if (!$this->refreshTokens->contains($refreshToken)) {
+            $this->refreshTokens[] = $refreshToken;
+            $refreshToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefreshToken(RefreshToken $refreshToken): self
+    {
+        if ($this->refreshTokens->removeElement($refreshToken)) {
+            // set the owning side to null (unless already changed)
+            if ($refreshToken->getUser() === $this) {
+                $refreshToken->setUser(null);
             }
         }
 
