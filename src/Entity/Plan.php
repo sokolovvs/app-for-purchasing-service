@@ -4,6 +4,8 @@ namespace App\Entity;
 
 
 use App\Repository\PlanRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
@@ -43,6 +45,11 @@ class Plan
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PlanRequestsLimitInPeriod::class, mappedBy="plan", orphanRemoval=true)
+     */
+    private $planRequestsLimitInPerods;
+
     public function __construct(
         UuidInterface $id,
         bool $isActive,
@@ -57,6 +64,7 @@ class Plan
         $this->period = $period;
         $this->title = $title;
         $this->description = $description;
+        $this->planRequestsLimitInPerods = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -120,6 +128,36 @@ class Plan
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanRequestsLimitInPeriod[]
+     */
+    public function getPlanRequestsLimitInPeriods(): Collection
+    {
+        return $this->planRequestsLimitInPerods;
+    }
+
+    public function addPlanRequestsLimitInPeriod(PlanRequestsLimitInPeriod $planRequestsLimitInPeriod): self
+    {
+        if (!$this->planRequestsLimitInPerods->contains($planRequestsLimitInPeriod)) {
+            $this->planRequestsLimitInPerods[] = $planRequestsLimitInPeriod;
+            $planRequestsLimitInPeriod->setPlan($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanRequestsLimitInPeriod(PlanRequestsLimitInPeriod $planRequestsLimitInPeriod): self
+    {
+        if ($this->planRequestsLimitInPerods->removeElement($planRequestsLimitInPeriod)) {
+            // set the owning side to null (unless already changed)
+            if ($planRequestsLimitInPeriod->getPlan() === $this) {
+                $planRequestsLimitInPeriod->setPlan(null);
+            }
+        }
 
         return $this;
     }
