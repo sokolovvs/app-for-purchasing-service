@@ -54,6 +54,11 @@ class Subscription
      */
     private $subscriptionHistories;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApiRequest::class, mappedBy="subscription", orphanRemoval=true)
+     */
+    private $apiRequests;
+
     public function __construct(
         UuidInterface $id,
         Customer $user,
@@ -68,6 +73,7 @@ class Subscription
         $this->created_at = new \DateTime();
         $this->expired_at = $expiredAt;
         $this->subscriptionHistories = new ArrayCollection();
+        $this->apiRequests = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -138,6 +144,36 @@ class Subscription
             // set the owning side to null (unless already changed)
             if ($subscriptionHistory->getSubscription() === $this) {
                 $subscriptionHistory->setSubscription(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ApiRequest[]
+     */
+    public function getApiRequests(): Collection
+    {
+        return $this->apiRequests;
+    }
+
+    public function addApiRequest(ApiRequest $apiRequest): self
+    {
+        if (!$this->apiRequests->contains($apiRequest)) {
+            $this->apiRequests[] = $apiRequest;
+            $apiRequest->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApiRequest(ApiRequest $apiRequest): self
+    {
+        if ($this->apiRequests->removeElement($apiRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($apiRequest->getSubscription() === $this) {
+                $apiRequest->setSubscription(null);
             }
         }
 
