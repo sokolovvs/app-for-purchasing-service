@@ -4,8 +4,9 @@ namespace App\Entity;
 
 
 use App\Entity\User\Customer;
-use App\Entity\User\User;
 use App\Repository\SubscriptionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
@@ -48,6 +49,11 @@ class Subscription
      */
     private $expired_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SubscriptionHistory::class, mappedBy="subscription", orphanRemoval=true)
+     */
+    private $subscriptionHistories;
+
     public function __construct(
         UuidInterface $id,
         Customer $user,
@@ -61,6 +67,7 @@ class Subscription
         $this->status = $status;
         $this->created_at = new \DateTime();
         $this->expired_at = $expiredAt;
+        $this->subscriptionHistories = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -103,6 +110,36 @@ class Subscription
     public function setExpiredAt(\DateTimeInterface $expiredAt): self
     {
         $this->expired_at = $expiredAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SubscriptionHistory[]
+     */
+    public function getSubscriptionHistories(): Collection
+    {
+        return $this->subscriptionHistories;
+    }
+
+    public function addSubscriptionHistory(SubscriptionHistory $subscriptionHistory): self
+    {
+        if (!$this->subscriptionHistories->contains($subscriptionHistory)) {
+            $this->subscriptionHistories[] = $subscriptionHistory;
+            $subscriptionHistory->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriptionHistory(SubscriptionHistory $subscriptionHistory): self
+    {
+        if ($this->subscriptionHistories->removeElement($subscriptionHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionHistory->getSubscription() === $this) {
+                $subscriptionHistory->setSubscription(null);
+            }
+        }
 
         return $this;
     }
