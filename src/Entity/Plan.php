@@ -50,6 +50,11 @@ class Plan
      */
     private $planRequestsLimitInPerods;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Subscription::class, mappedBy="plan", orphanRemoval=true)
+     */
+    private $subscriptions;
+
     public function __construct(
         UuidInterface $id,
         bool $isActive,
@@ -65,6 +70,7 @@ class Plan
         $this->title = $title;
         $this->description = $description;
         $this->planRequestsLimitInPerods = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): UuidInterface
@@ -156,6 +162,36 @@ class Plan
             // set the owning side to null (unless already changed)
             if ($planRequestsLimitInPeriod->getPlan() === $this) {
                 $planRequestsLimitInPeriod->setPlan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subscription[]
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setPlan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): self
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getPlan() === $this) {
+                $subscription->setPlan(null);
             }
         }
 
