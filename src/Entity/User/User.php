@@ -7,6 +7,8 @@ use App\Entity\Card;
 use App\Entity\IdentityInterface;
 use App\Entity\RefreshToken;
 use App\Repository\User\UserRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +16,6 @@ use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -78,7 +79,7 @@ class User implements IdentityInterface
         $this->email = $email;
         $this->password_hash = $passwordHash;
         $this->timezone = $timezone;
-        $this->created_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
         $this->isActive = false;
         $this->cards = new ArrayCollection();
         $this->refreshTokens = new ArrayCollection();
@@ -113,7 +114,7 @@ class User implements IdentityInterface
         return $this;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->created_at;
     }
