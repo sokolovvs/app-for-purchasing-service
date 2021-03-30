@@ -8,6 +8,7 @@ use App\Components\Errors\HttpError;
 use App\Components\Exceptions\ApplicationExceptions\ImproveApplicationException;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Exceptions\ApplicationExceptions\Resource\Validation\ValidationException;
+use App\Components\Exceptions\ApplicationExceptions\Security\AccessDeniedException;
 use App\Components\Exceptions\ApplicationExceptions\Security\UnauthorizedException;
 use App\Components\Helpers\Env\EnvHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,6 +45,10 @@ class ExceptionToHttpErrorErrorTransformer implements ExceptionToHttpErrorTransf
 
             if ($exception instanceof UnauthorizedException) {
                 $code = Response::HTTP_UNAUTHORIZED;
+            }
+
+            if ($exception instanceof AccessDeniedException) {
+                $code = Response::HTTP_FORBIDDEN;
             }
 
             if ($exception instanceof ResourceNotFoundException) {
