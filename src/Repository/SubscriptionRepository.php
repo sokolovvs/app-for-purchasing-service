@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Entity\Subscription;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +22,22 @@ class SubscriptionRepository extends ServiceEntityRepository
         parent::__construct($registry, Subscription::class);
     }
 
-    // /**
-    //  * @return Subscription[] Returns an array of Subscription objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param User $user
+     *
+     * @return Subscription
+     * @throws ResourceNotFoundException
+     */
+    public function getActiveSubscriptionByUser(User $user): Subscription
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $subscription = $this->findOneBy(['_user' => $user,]);
 
-    /*
-    public function findOneBySomeField($value): ?Subscription
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($subscription === null
+            || $subscription->getStatus()->getTitle()
+            !== "Active") { // TODO: refactor this later
+            throw new ResourceNotFoundException("User with id {$user->getId()} has no active subscriptions");
+        }
+
+        return $subscription;
     }
-    */
 }

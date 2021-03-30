@@ -35,6 +35,5 @@ class CustomerWasRegisteredHandler implements MessageHandlerInterface
         $this->emailConfirmMailFactory->create($customer, $confirmationId)
             ->send();
         $this->addEmailToConfirm->call(new AddEmailToConfirmDto($confirmationId, $hash, $customer));
-
     }
 }

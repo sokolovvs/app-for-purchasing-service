@@ -4,13 +4,14 @@ namespace App\Entity;
 
 
 use App\Repository\ApiRequestRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ApiRequestRepository::class)
  */
-class ApiRequest
+class ApiRequest implements IdentityInterface
 {
     /**
      * @ORM\Id
@@ -34,15 +35,19 @@ class ApiRequest
      */
     private $called_at;
 
-    public function __construct(UuidInterface $id, Subscription $subscription, array $content = [])
-    {
+    public function __construct(
+        UuidInterface $id,
+        Subscription $subscription,
+        DateTimeInterface $calledAt,
+        array $content = []
+    ) {
         $this->id = $id;
         $this->subscription = $subscription;
         $this->content = $content;
-        $this->called_at = new \DateTime();
+        $this->called_at = $calledAt;
     }
 
-    public function getId(): ?int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -57,7 +62,7 @@ class ApiRequest
         return $this->content;
     }
 
-    public function getCalledAt(): \DateTimeInterface
+    public function getCalledAt(): DateTimeInterface
     {
         return $this->called_at;
     }

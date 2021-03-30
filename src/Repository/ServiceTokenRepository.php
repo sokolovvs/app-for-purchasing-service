@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Entity\ServiceToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +21,23 @@ class ServiceTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, ServiceToken::class);
     }
 
-    // /**
-    //  * @return ServiceToken[] Returns an array of ServiceToken objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param string $publicId
+     * @param string $secret
+     *
+     * @return ServiceToken
+     * @throws ResourceNotFoundException
+     */
+    public function getByPublicIdAndToken(string $publicId, string $secret): ServiceToken
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $token = $this->findOneBy(['public_id' => $publicId, 'token' => $secret]);
 
-    /*
-    public function findOneBySomeField($value): ?ServiceToken
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($token === null) {
+            throw new ResourceNotFoundException(
+                "token is not exists in db with params public_id: $publicId and token: $secret"
+            );
+        }
+
+        return $token;
     }
-    */
 }

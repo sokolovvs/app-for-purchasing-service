@@ -16,3 +16,4 @@ framework:
     routing:
       # Route your messages to the transports
       'App\Components\Events\User\Customer\CustomerWasRegistered': async
+      'App\Components\Events\ApiTpsRequest\ClientRequestedTpsApi': async
