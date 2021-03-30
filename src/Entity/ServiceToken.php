@@ -43,7 +43,7 @@ class ServiceToken
         $this->_user = $user;
     }
 
-    public function getId(): ?UuidInterface
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -58,7 +58,7 @@ class ServiceToken
         return $this->public_id;
     }
 
-    public function getUser(): ?Customer
+    public function getUser(): Customer
     {
         return $this->_user;
     }
