@@ -9,6 +9,7 @@ use App\Repository\User\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -20,9 +21,9 @@ class Customer extends User
      */
     private $subscriptions;
 
-    public function __construct()
+    public function __construct(UuidInterface $uuid, string $email, string $passwordHash, string $timezone)
     {
-        parent::__construct();
+        parent::__construct($uuid, $email, $passwordHash, $timezone);
         $this->subscriptions = new ArrayCollection();
     }
 
