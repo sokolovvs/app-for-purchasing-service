@@ -7,13 +7,9 @@ namespace App\Repository\User;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Entity\User\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CustomerRepository
- *
- * @package App\Repository\User
- */
 class CustomerRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -30,5 +26,19 @@ class CustomerRepository extends ServiceEntityRepository
         }
 
         throw new ResourceNotFoundException('Customer not found', null, ['id' => $id]);
+    }
+
+    public function getCustomersByParams(array $params): Paginator
+    {
+        $qb = $this->createQueryBuilder('u')
+            //            ->innerJoin('u.Subscriptions', 's')
+            //            ->innerJoin('s.Status', 'ss')
+        ;
+
+        //        if ($page = $params['page'] ?? 1) {
+        //            $qb->;
+        //        }
+
+        return new Paginator($qb, true);
     }
 }
