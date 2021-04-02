@@ -30,14 +30,37 @@ class CustomerRepository extends ServiceEntityRepository
 
     public function getCustomersByParams(array $params): Paginator
     {
-        $qb = $this->createQueryBuilder('u')
-            //            ->innerJoin('u.Subscriptions', 's')
-            //            ->innerJoin('s.Status', 'ss')
-        ;
+        $page = $params['page'] ?? 1;
+        $offset = $params['offset'] ?? 10;
 
-        //        if ($page = $params['page'] ?? 1) {
-        //            $qb->;
-        //        }
+        $qb = $this->createQueryBuilder('u')
+            ->innerJoin('u.subscriptions', 's')
+            ->innerJoin('s.status', 'ss')
+            ->innerJoin('s.plan', 'p');
+
+        if ($userActiveStatuses = $params['user']['active_statuses'] ?? []) {
+            $qb->andWhere('u.is_active IN (:active_statuses)')
+                ->setParameter('active_statuses', $userActiveStatuses);
+        }
+
+        if ($email = $params['email'] ?? '') {
+            $qb->andWhere('u.email LIKE :email')
+                ->setParameter('email', "%$email%");
+        }
+
+        if ($subscriptionStatuses = $params['subscription']['statuses'] ?? []) {
+            $qb->andWhere('ss.title IN (:subscription_statuses)')
+                ->setParameter('subscription_statuses', $subscriptionStatuses);
+        }
+
+        if ($plans = $params['plans'] ?? []) {
+            $qb->andWhere('p.title IN (:plans)')
+                ->setParameter('plans', $plans);
+        }
+
+        $qb->setFirstResult(($page - 1) * $offset);
+
+        $qb->orderBy('u.created_at', 'DESC');
 
         return new Paginator($qb, true);
     }
