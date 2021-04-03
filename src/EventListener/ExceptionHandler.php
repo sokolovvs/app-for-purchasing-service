@@ -35,7 +35,7 @@ class ExceptionHandler implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
         $httpError = $this->exceptionToHttpErrorTransformer->transform($exception);
-        $this->logger->warning('Exception was handled in global exception handler', ['exception' => $exception]);
+        $this->logger->error('Exception was handled in global exception handler', ['exception' => $exception]);
 
         if (!$exception instanceof ImproveApplicationException || !$exception instanceof NotFoundHttpException) {
             $this->logger->critical('Unknown error', ['exception' => $exception]);
@@ -46,7 +46,6 @@ class ExceptionHandler implements EventSubscriberInterface
 
     private function sendResponse(ExceptionEvent $event, HttpError $httpError): void
     {
-        //TODO: need check accept header and send response with needs format
         $event->setResponse(
             new JsonResponse(
                 $this->httpErrorNormalizer->normalize($httpError), $httpError->getStatus(),
