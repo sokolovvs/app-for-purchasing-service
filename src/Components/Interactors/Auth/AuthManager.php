@@ -11,6 +11,7 @@ use App\Repository\User\UserRepository;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 class AuthManager
 {
@@ -29,7 +30,7 @@ class AuthManager
     {
         try {
             return $this->extractUserFromDecodedToken($this->decodeToken($request->headers->get('Authorization')));
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->logger->info(sprintf("%s%s%s", $throwable->getMessage(), PHP_EOL, $throwable->getTraceAsString()));
         }
 
@@ -38,7 +39,11 @@ class AuthManager
 
     public function getCurrentUserOrThrowException(Request $request): User
     {
-        return $this->getCurrentUser($request) ?? throw new UnauthorizedException();
+        if ($user = $this->getCurrentUser($request)) {
+            return $user;
+        }
+
+        throw new UnauthorizedException();
     }
 
     public function issueTokenForUser(User $user): string
@@ -69,7 +74,7 @@ class AuthManager
             }
 
             return $this->issuer->fromUser($user);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw UnauthorizedException::invalidCredentials();
         }
     }
