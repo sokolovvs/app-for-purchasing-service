@@ -17,7 +17,7 @@ class PlanNormalizer implements NormalizerInterface
             'is_active' => $object->isActive(),
             'title' => $object->getTitle(),
             'amount' => $object->getAmount(),
-            'description' => $object->getAmount(),
+            'description' => $object->getDescription(),
         ];
     }
 
