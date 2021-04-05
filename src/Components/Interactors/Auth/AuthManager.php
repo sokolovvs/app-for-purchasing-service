@@ -5,6 +5,7 @@ namespace App\Components\Interactors\Auth;
 
 
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
+use App\Components\Exceptions\ApplicationExceptions\Security\AccessDeniedException;
 use App\Components\Exceptions\ApplicationExceptions\Security\UnauthorizedException;
 use App\Entity\User\User;
 use App\Repository\User\UserRepository;
@@ -76,6 +77,21 @@ class AuthManager
             return $this->issuer->fromUser($user);
         } catch (Throwable) {
             throw UnauthorizedException::invalidCredentials();
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws AccessDeniedException
+     * @throws UnauthorizedException
+     */
+    public function checkThatAuthorizedUserIsAdmin(Request $request): void
+    {
+        $user = $this->getCurrentUserOrThrowException($request);
+
+        if (!$user->isAdmin()) {
+            throw new AccessDeniedException();
         }
     }
 

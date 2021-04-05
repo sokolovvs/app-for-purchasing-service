@@ -202,4 +202,9 @@ class User implements IdentityInterface
 
         return $this;
     }
+
+    public function isAdmin(): bool
+    {
+        return $this instanceof Admin;
+    }
 }
