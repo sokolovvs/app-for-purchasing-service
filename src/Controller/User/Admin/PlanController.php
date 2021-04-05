@@ -6,6 +6,7 @@ namespace App\Controller\User\Admin;
 
 use App\Components\Dto\Plan\AddPlanDto;
 use App\Components\Interactors\CRUD\Plan\AddPlanInteractor;
+use App\Repository\PlanRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,5 +23,12 @@ class PlanController extends AbstractController
         $request->request->set("id", Uuid::uuid4()->toString());
 
         return $this->json($interactor->call(AddPlanDto::fromRequest($request)), Response::HTTP_CREATED);
+    }
+
+    #[Route('/api/v1/plans', name: 'get-plans', methods: ['GET'])]
+    public function getPlans(
+        PlanRepository $planRepository
+    ) {
+        return $this->json($planRepository->findAll());
     }
 }
