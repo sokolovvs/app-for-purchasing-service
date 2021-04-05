@@ -5,10 +5,12 @@ namespace App\Controller\User\Admin;
 
 
 use App\Components\Dto\Plan\AddPlanDto;
+use App\Components\Dto\Plan\UpdatePlanDto;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Helpers\Constants\RouteRequirements;
 use App\Components\Interactors\Auth\AuthManager;
 use App\Components\Interactors\CRUD\Plan\AddPlanInteractor;
+use App\Components\Interactors\CRUD\Plan\UpdatePlanInteractor;
 use App\Repository\PlanRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,4 +54,21 @@ class PlanController extends AbstractController
 
         return $this->json($plan);
     }
+
+    #[Route('/api/v1/plans/{planId}', name: 'update-plan', requirements: [
+        'planId' => RouteRequirements::UUID_FORMAT,
+    ], methods: ['PUT'])]
+    public function updatePlan(
+        string $planId,
+        Request $request,
+        UpdatePlanInteractor $interactor,
+        AuthManager $authManager
+    ) {
+        $request->request->set('id', $planId);
+        $authManager->checkThatAuthorizedUserIsAdmin($request);
+        $interactor->call(UpdatePlanDto::fromRequest($request));
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
 }
