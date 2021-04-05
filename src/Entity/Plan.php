@@ -30,7 +30,7 @@ class Plan
      */
     private $amount;
 
-    /**getIsActive
+    /**
      * @ORM\Column(type="integer")
      */
     private $period;
