@@ -99,7 +99,7 @@ class Plan
 
     public function getAmount(): int
     {
-        return $this->amount;
+        return $this->amount / 100;
     }
 
     public function getPeriod(): int
