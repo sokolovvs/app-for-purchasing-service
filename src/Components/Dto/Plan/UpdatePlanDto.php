@@ -7,7 +7,7 @@ namespace App\Components\Dto\Plan;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UpdatePlanDtoadmin
+final class UpdatePlanDto
 {
     #[Assert\NotNull]
     #[Assert\Uuid]
