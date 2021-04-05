@@ -21,7 +21,7 @@ final class AddPlanDto
     #[Assert\GreaterThanOrEqual(0)]
     private $amount;
 
-    #[Assert\Type("int")]
+    #[Assert\Type("numeric")]
     #[Assert\NotNull]
     #[Assert\GreaterThanOrEqual(0)]
     private $period;
@@ -49,7 +49,7 @@ final class AddPlanDto
     {
         return new self(
             $request->request->get("id"), (bool)$request->request->get('is_active', true),
-            $request->request->get('amount'), $request->request->get('period'), $request->request->get('title'),
+            $request->request->get('amount'), (int)$request->request->get('period'), $request->request->get('title'),
             $request->request->get('description')
         );
     }
