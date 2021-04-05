@@ -5,6 +5,8 @@ namespace App\Controller\User\Admin;
 
 
 use App\Components\Dto\Plan\AddPlanDto;
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
+use App\Components\Helpers\Constants\RouteRequirements;
 use App\Components\Interactors\CRUD\Plan\AddPlanInteractor;
 use App\Repository\PlanRepository;
 use Ramsey\Uuid\Uuid;
@@ -30,5 +32,21 @@ class PlanController extends AbstractController
         PlanRepository $planRepository
     ) {
         return $this->json($planRepository->findAll());
+    }
+
+    #[Route('/api/v1/plans/{planId}', name: 'get-plan', requirements: [
+        'planId' => RouteRequirements::UUID_FORMAT,
+    ], methods: ['GET'])]
+    public function getPlan(
+        string $planId,
+        PlanRepository $planRepository
+    ) {
+        $plan = $planRepository->find($planId);
+
+        if (!$plan) {
+            throw new ResourceNotFoundException("Plan not found");
+        }
+
+        return $this->json($plan);
     }
 }
