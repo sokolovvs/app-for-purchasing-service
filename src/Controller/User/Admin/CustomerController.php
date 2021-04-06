@@ -3,8 +3,11 @@
 namespace App\Controller\User\Admin;
 
 
+use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
+use App\Components\Helpers\Constants\RouteRequirements;
 use App\Components\Interactors\Auth\AuthManager;
 use App\Components\Interactors\CRUD\User\GetCustomersInteractor;
+use App\Repository\User\CustomerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,5 +30,25 @@ class CustomerController extends AbstractController
                 'qty' => $paginator->count(),
             ]
         );
+    }
+
+    #[Route('/api/v1/customers/{userId}', name: 'get-customers', requirements: [
+        'userId' => RouteRequirements::UUID_FORMAT,
+    ], methods: ['GET'],)]
+    public function getCustomerById(
+        string $userId,
+        Request $request,
+        AuthManager $authManager,
+        CustomerRepository $customerRepository
+    ): JsonResponse {
+        $authManager->getCurrentUserOrThrowException($request);
+
+        $user = $customerRepository->find($userId);
+
+        if (!$user) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $this->json($user);
     }
 }
