@@ -4,6 +4,7 @@
 namespace App\Components\Interactors\CRUD\Plan;
 
 
+use App\Components\Dto\Plan\UpdatePlanDto;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Validation\ApplicationValidatorInterface;
 use App\Entity\PlanRequestsLimitInPeriod;
