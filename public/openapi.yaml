@@ -81,6 +81,44 @@ components:
         content:
           type: object
           description: "json decoded object (text:string)"
+    PlanReadModel:
+      required:
+        - id
+        - is_active
+        - title
+        - amount
+        - description
+        - limits
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        is_active:
+          type: boolean
+        title:
+          type: string
+        amount:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        limits:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanRestrictionReadModel'
+    PlanRestrictionReadModel:
+      required:
+        - id
+        - limit
+        - period
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        limit:
+          type: integer
+          description: Qty of requests to service TPS
+        period:
+          type: integer
+          description: Qty of days
   securitySchemes:
     bearerAuth:
       type: http
@@ -257,3 +295,115 @@ paths:
                     type: integer
         403:
           $ref: '#/components/responses/AccessDeniedErrorResponse'
+  /plans:
+    get:
+      tags:
+        - Plan
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanReadModel'
+    post:
+      tags:
+        - Plan
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - is_active
+                - title
+                - amount
+                - description
+                - limits
+              properties:
+                is_active:
+                  type: boolean
+                title:
+                  type: string
+                amount:
+                  type: integer
+                description:
+                  type: string
+                  nullable: true
+      responses:
+        201:
+          description: Ok, created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanReadModel'
+        422:
+          $ref: '#/components/responses/ValidationErrorResponse'
+  /plans/{planId}:
+    get:
+      tags:
+        - Plan
+      parameters:
+        - in: path
+          name: planId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanReadModel'
+        404:
+          $ref: '#/components/responses/NotFoundErrorResponse'
+    put:
+      tags:
+        - Plan
+      parameters:
+        - in: path
+          name: planId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - is_active
+                - title
+                - amount
+                - description
+                - limits
+              properties:
+                is_active:
+                  type: boolean
+                title:
+                  type: string
+                amount:
+                  type: integer
+                description:
+                  type: string
+                  nullable: true
+                limits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PlanRestrictionReadModel'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanReadModel'
+        404:
+          $ref: '#/components/responses/NotFoundErrorResponse'
+        422:
+          $ref: '#/components/responses/ValidationErrorResponse'
