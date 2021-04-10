@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Components\Dto\Requests\AddTpsApiRequestDto;
+use App\Components\Interactors\Auth\AuthManager;
 use App\Components\Interactors\CRUD\TpsApiRequest\AddRequestInteractor;
 use App\Components\Interactors\CRUD\TpsApiRequest\GetRequestsByParams;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +28,9 @@ class ApiRequestController extends AbstractController
     public function listTpsApiRequests(
         Request $request,
         GetRequestsByParams $interactor,
+        AuthManager $authManager
     ) {
+        $authManager->checkThatAuthorizedUserIsAdmin($request);
         $paginator = $interactor->call($request->query->all());
 
         return $this->json(['data' => $paginator->getQuery()->getResult(), 'qty' => $paginator->count()]);
