@@ -61,7 +61,7 @@ components:
       type: string
       format: uuid
       example: '4e927af3-4ccb-4a3c-bdf0-f8a4e62c87f4'
-    DateTimeIso8604:
+    DateTimeIso8601:
       type: string
       format: date-time
       example: '2021-03-31T02:35:22+00:00'
@@ -77,7 +77,7 @@ components:
         subscription_id:
           $ref: '#/components/schemas/Uuid'
         called_at:
-          $ref: '#/components/schemas/DateTimeIso8604'
+          $ref: '#/components/schemas/DateTimeIso8601'
         content:
           type: object
           description: "json decoded object (text:string)"
