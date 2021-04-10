@@ -12,7 +12,7 @@ servers:
   - url: 'http://dev.gtbt.api/api/v1'
     description: 'DEV API v1'
 tags:
-  - name: Auth
+  - name: SignIn/SignUp
 components:
   schemas:
     HttpError:
@@ -96,7 +96,7 @@ paths:
   /login:
     post:
       tags:
-        - Auth
+        - SignIn/SignUp
       summary: Login
       requestBody:
         content:
@@ -122,3 +122,29 @@ paths:
           $ref: '#/components/responses/UnauthorizedErrorResponse'
         422:
           $ref: '#/components/responses/ValidationErrorResponse'
+  /register:
+    post:
+      tags:
+        - SignIn/SignUp
+      summary: Registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+                - timezone
+              properties:
+                username:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                timezone:
+                  type: string
+                  example: 'Asia/Omsk'
+      responses:
+        204:
+          description: Ok. User should confirm  its email
