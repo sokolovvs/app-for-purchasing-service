@@ -31,14 +31,14 @@ class CustomerRepository extends ServiceEntityRepository
     public function getCustomersByParams(array $params): Paginator
     {
         $page = $params['page'] ?? 1;
-        $offset = $params['offset'] ?? 10;
+        $offset = $params['limit'] ?? 10;
 
         $qb = $this->createQueryBuilder('u')
             ->innerJoin('u.subscriptions', 's')
             ->innerJoin('s.status', 'ss')
             ->innerJoin('s.plan', 'p');
 
-        if ($userActiveStatuses = $params['user']['active_statuses'] ?? []) {
+        if ($userActiveStatuses = $params['user_active_statuses'] ?? []) {
             $qb->andWhere('u.is_active IN (:active_statuses)')
                 ->setParameter('active_statuses', $userActiveStatuses);
         }
@@ -48,13 +48,13 @@ class CustomerRepository extends ServiceEntityRepository
                 ->setParameter('email', "%$email%");
         }
 
-        if ($subscriptionStatuses = $params['subscription']['statuses'] ?? []) {
+        if ($subscriptionStatuses = $params['subscription_statuses'] ?? []) {
             $qb->andWhere('ss.title IN (:subscription_statuses)')
                 ->setParameter('subscription_statuses', $subscriptionStatuses);
         }
 
         if ($plans = $params['plans'] ?? []) {
-            $qb->andWhere('p.title IN (:plans)')
+            $qb->andWhere('p.id IN (:plans)')
                 ->setParameter('plans', $plans);
         }
 
