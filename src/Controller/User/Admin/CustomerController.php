@@ -37,11 +37,8 @@ class CustomerController extends AbstractController
     ], methods: ['GET'],)]
     public function getCustomerById(
         string $userId,
-        Request $request,
-        AuthManager $authManager,
         CustomerRepository $customerRepository
     ): JsonResponse {
-        $authManager->getCurrentUserOrThrowException($request);
 
         $user = $customerRepository->find($userId);
 
