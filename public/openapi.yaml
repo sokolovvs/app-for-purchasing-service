@@ -14,6 +14,7 @@ servers:
 tags:
   - name: SignIn/SignUp
   - name: ApiRequest
+  - name: Customer
 components:
   schemas:
     HttpError:
@@ -119,6 +120,55 @@ components:
         period:
           type: integer
           description: Qty of days
+    Customer:
+      required:
+        - id
+        - email
+        - created_at
+        - is_active
+        - subscriptions
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        email:
+          type: string
+          format: email
+        created_at:
+          $ref: '#/components/schemas/DateTimeIso8601'
+        is_active:
+          type: boolean
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+    Subscription:
+      required:
+        - id
+        - created_at
+        - expired_at
+        - status
+        - plan
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        created_at:
+          $ref: '#/components/schemas/DateTimeIso8601'
+        expired_at:
+          $ref: '#/components/schemas/DateTimeIso8601'
+        status:
+          $ref: '#/components/schemas/SubscriptionStatus'
+        plan:
+          $ref: '#/components/schemas/PlanReadModel'
+    SubscriptionStatus:
+      required:
+        - id
+        - title
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        title:
+          type: string
+          description: slug
   securitySchemes:
     bearerAuth:
       type: http
@@ -407,3 +457,92 @@ paths:
           $ref: '#/components/responses/NotFoundErrorResponse'
         422:
           $ref: '#/components/responses/ValidationErrorResponse'
+  /customers:
+    get:
+      tags:
+        - Customer
+      summary: Customers pagination
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+            format: int32
+            default: "20"
+        - in: query
+          name: page
+          schema:
+            type: string
+            format: int32
+            minimum: 1
+            default: "1"
+        - in: query
+          name: user_active_statuses
+          description: array of (0,1), where 1 - is active, 0 -is not active
+          schema:
+            type: array
+            items:
+              type: string
+              format: boolean
+        - in: query
+          name: subscription_statuses
+          description: subscription statuses ids
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Uuid'
+        - in: query
+          name: email
+          description: search by email (substr)
+          schema:
+            type: string
+            format: email
+        - in: query
+          name: plans
+          description: plans ids
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Uuid'
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                  - qty
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+                  qty:
+                    type: integer
+        403:
+          $ref: '#/components/responses/AccessDeniedErrorResponse'
+  /customers/{customerId}:
+    get:
+      tags:
+        - Customer
+      summary: Customer detail
+      parameters:
+        - in: path
+          name: customerId
+          description: Customer's id
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        404:
+          $ref: '#/components/responses/NotFoundErrorResponse'
