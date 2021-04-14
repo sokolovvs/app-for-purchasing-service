@@ -531,8 +531,8 @@ paths:
       summary: Customer detail
       parameters:
         - in: path
+          required: true
           name: customerId
-          description: Customer's id
           schema:
             $ref: '#/components/schemas/Uuid'
       security:
