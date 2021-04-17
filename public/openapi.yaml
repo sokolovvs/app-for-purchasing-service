@@ -245,6 +245,27 @@ paths:
           $ref: '#/components/responses/UnauthorizedErrorResponse'
         422:
           $ref: '#/components/responses/ValidationErrorResponse'
+  /access-token:
+    post:
+      tags:
+        - SignIn/SignUp
+      summary: Use this endpoint to get access_token by refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
   /register:
     post:
       tags:
