@@ -7,10 +7,14 @@ namespace App\Components\Interactors\Auth;
 use App\Components\Exceptions\ApplicationExceptions\Resource\ResourceNotFoundException;
 use App\Components\Exceptions\ApplicationExceptions\Security\AccessDeniedException;
 use App\Components\Exceptions\ApplicationExceptions\Security\UnauthorizedException;
+use App\Entity\RefreshToken;
 use App\Entity\User\User;
+use App\Repository\RefreshTokenRepository;
 use App\Repository\User\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
@@ -19,12 +23,21 @@ class AuthManager
     private UserRepository $userRepository;
     private LoggerInterface $logger;
     private TokenIssuer $issuer;
+    private EntityManagerInterface $em;
+    private RefreshTokenRepository $refreshTokenRepository;
 
-    public function __construct(UserRepository $userRepository, TokenIssuer $issuer, LoggerInterface $logger)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        TokenIssuer $issuer,
+        LoggerInterface $logger,
+        EntityManagerInterface $em,
+        RefreshTokenRepository $refreshTokenRepository
+    ) {
         $this->userRepository = $userRepository;
         $this->logger = $logger;
         $this->issuer = $issuer;
+        $this->em = $em;
+        $this->refreshTokenRepository = $refreshTokenRepository;
     }
 
     public function getCurrentUser(Request $request): ?User
@@ -58,10 +71,10 @@ class AuthManager
      * @param string $email
      * @param string $password
      *
-     * @return string
+     * @return array<string, string>- Keys access_token, refresh_token
      * @throws UnauthorizedException
      */
-    public function signIn(string $email, string $password): string
+    public function signIn(string $email, string $password): array
     {
         try {
             $user = $this->userRepository->findActiveByEmail($email);
@@ -74,7 +87,32 @@ class AuthManager
                 throw UnauthorizedException::invalidCredentials();
             }
 
-            return $this->issuer->fromUser($user);
+            return [
+                'access_token' => $this->issuer->fromUser($user),
+                'refresh_token' => $this->generateRefreshToken($user),
+            ];
+        } catch (Throwable) {
+            throw UnauthorizedException::invalidCredentials();
+        }
+    }
+
+    /**
+     * @param string $refreshToken
+     *
+     * @return string
+     * @throws UnauthorizedException
+     */
+    public function updateAccessTokenWithRefreshToken(string $refreshToken): string
+    {
+        try {
+            /* @var RefreshToken $refreshToken */
+            $refreshToken = $this->refreshTokenRepository->findBy(['token' => $refreshToken]);
+
+            if (!$refreshToken) {
+                throw new ResourceNotFoundException();
+            }
+
+            return $this->issuer->fromUser($refreshToken->getUser());
         } catch (Throwable) {
             throw UnauthorizedException::invalidCredentials();
         }
@@ -93,6 +131,16 @@ class AuthManager
         if (!$user->isAdmin()) {
             throw new AccessDeniedException();
         }
+    }
+
+    public function generateRefreshToken(User $user): string
+    {
+        $token = $this->issuer->fromUser($user);
+        $refreshToken = new RefreshToken(Uuid::uuid4(), $user, $token);
+        $user->addRefreshToken($refreshToken);
+        $this->em->persist($refreshToken);
+
+        return $token;
     }
 
     private function decodeToken(string $token): array

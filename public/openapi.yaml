@@ -56,9 +56,18 @@ components:
           type: object
           description: Associative array, where key - parameter in which some error, value - any
           example: { 'offered_emails': [ 'example@example.net', 'example@example.com' ] }
-    AuthorizationToken:
+    AccessToken:
       type: string
       example: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvdXNlcnNcL2xvZ2luIiwiaWF0IjoxNjAwODU4Nzg4LCJleHAiOjE2MDA4NjIzODgsIm5iZiI6MTYwMDg1ODc4OCwianRpIjoiV3NleVhUTXNJUkU5ODczWiIsInN1YiI6MywicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.mJpw-nBGcVsOuAslPuy9qD3R3sTyh7_vjh5ci4QpjQk'
+    RefreshToken:
+      type: string
+      example: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvdXNlcnNcL2xvZ2luIiwiaWF0IjoxNjAwODU4Nzg4LCJleHAiOjE2MDA4NjIzODgsIm5iZiI6MTYwMDg1ODc4OCwianRpIjoiV3NleVhUTXNJUkU5ODczWiIsInN1YiI6MywicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.mJpw-nBGcVsOuAslPuy9qD3R3sTyh7_vjh5ci4QpjQk'
+    PairAccessAndRefreshTokens:
+      properties:
+        access_token:
+          $ref: '#/components/schemas/AccessToken'
+        refresh_token:
+          $ref: '#/components/schemas/RefreshToken'
     Uuid:
       type: string
       format: uuid
@@ -231,7 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthorizationToken'
+                $ref: '#/components/schemas/PairAccessAndRefreshTokens'
         401:
           $ref: '#/components/responses/UnauthorizedErrorResponse'
         422:
