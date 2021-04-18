@@ -32,4 +32,15 @@ class ImproveApplicationException extends Exception
     {
         return $this->additionalParams;
     }
+
+    public function getInvalidParamsMessage(string $separator = ', '): string
+    {
+        $message = '';
+
+        foreach ($this->getInvalidParams() as $propertyName => $invalidParam) {
+            $message .= ($propertyName . ': ' . implode($separator, $invalidParam) . PHP_EOL);
+        }
+
+        return trim($message);
+    }
 }

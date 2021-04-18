@@ -33,18 +33,22 @@ final class CreateUserDto
      */
     private UuidInterface $uuid;
 
+    private bool $isActive;
+
     public function __construct(
         UuidInterface $uuid,
         string $email,
         string $password,
         string $timezone,
-        string $userType
+        string $userType,
+        bool $isActive = false
     ) {
         $this->email = $email;
         $this->password = $password;
         $this->timezone = $timezone;
         $this->userType = $userType;
         $this->uuid = $uuid;
+        $this->isActive = $isActive;
     }
 
     public function getEmail(): string
@@ -73,5 +77,13 @@ final class CreateUserDto
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 }

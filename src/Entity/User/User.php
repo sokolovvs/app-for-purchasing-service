@@ -61,7 +61,7 @@ class User implements IdentityInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isActive;
+    protected $isActive;
 
     /**
      * @ORM\OneToMany(targetEntity=Card::class, mappedBy="_user", orphanRemoval=true)
