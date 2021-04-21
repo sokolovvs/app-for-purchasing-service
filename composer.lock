@@ -1,20 +1,20 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "b6aa428c678817e670ad352d55b537b3",
-    "packages": [
-        {
-            "name": "brick/math",
-            "version": "0.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "283a40c901101e66de7061bd359252c013dcc43c"
-            },
-            "dist": {
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "d535e8520a230971a6c0db2df256481b",
+  "packages": [
+    {
+      "name": "brick/math",
+      "version": "0.9.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/brick/math.git",
+        "reference": "283a40c901101e66de7061bd359252c013dcc43c"
+      },
+      "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/brick/math/zipball/283a40c901101e66de7061bd359252c013dcc43c",
                 "reference": "283a40c901101e66de7061bd359252c013dcc43c",
@@ -6191,26 +6191,60 @@
                 },
                 {
                     "url": "https://github.com/fabpot",
-                    "type": "github"
+                  "type": "github"
                 },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
+              {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+              }
             ],
-            "time": "2020-12-08T17:02:38+00:00"
+          "time": "2020-12-08T17:02:38+00:00"
         },
-        {
-            "name": "twig/twig",
-            "version": "v3.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b02fa41f3783a2616eccef7b92fbc2343ffed737",
+    {
+      "name": "troytft/cloud-payments-client",
+      "version": "0.1.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Troytft/cloud-payments-client.git",
+        "reference": "5e45ee22ab5936adc3ef079fc1a77a8a0a150017"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Troytft/cloud-payments-client/zipball/5e45ee22ab5936adc3ef079fc1a77a8a0a150017",
+        "reference": "5e45ee22ab5936adc3ef079fc1a77a8a0a150017",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=5.5"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "CloudPayments\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "description": "Client for CloudPayments.ru",
+      "support": {
+        "issues": "https://github.com/Troytft/cloud-payments-client/issues",
+        "source": "https://github.com/Troytft/cloud-payments-client/tree/master"
+      },
+      "time": "2018-12-28T12:03:24+00:00"
+    },
+    {
+      "name": "twig/twig",
+      "version": "v3.1.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/twigphp/Twig.git",
+        "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/twigphp/Twig/zipball/b02fa41f3783a2616eccef7b92fbc2343ffed737",
                 "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737",
                 "shasum": ""
             },

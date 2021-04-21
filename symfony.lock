@@ -372,6 +372,9 @@
     "symfony/yaml": {
         "version": "v5.1.7"
     },
+    "troytft/cloud-payments-client": {
+        "version": "0.1.0"
+    },
     "twig/twig": {
         "version": "v3.1.1"
     },
