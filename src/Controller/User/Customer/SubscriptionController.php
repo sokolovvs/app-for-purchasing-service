@@ -5,10 +5,12 @@ namespace App\Controller\User\Customer;
 
 
 use App\Components\Helpers\Env\EnvHelper;
+use App\Components\Helpers\Exception\ExceptionFormatter;
 use App\Components\Interactors\Auth\AuthManager;
 use CloudPayments\Manager;
 use CloudPayments\Model\Required3DS;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,13 @@ use Throwable;
 
 class SubscriptionController extends AbstractController
 {
+    private LoggerInterface $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     #[Route('/api/v1/subscriptions', name: 'subscribe', methods: ['POST'])]
     public function subscribe(
         Request $request,
@@ -47,6 +56,9 @@ class SubscriptionController extends AbstractController
             }
         } catch (Throwable $e) {
             // TODO handle errors & handle need 3D secure
+
+            $this->logger->alert(ExceptionFormatter::format($e));
+            return $this->json(['message' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
